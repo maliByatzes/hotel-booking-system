@@ -13,4 +13,7 @@ docker-stop:
 docker-start:
 	docker compose start
 
-.PHONY: docker-up docker-reset docker-stop docker-start
+server:
+	pnpm start
+
+.PHONY: docker-up docker-reset docker-stop docker-start server
