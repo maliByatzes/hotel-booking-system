@@ -10,7 +10,7 @@ validateEnv();
 const prisma = new PrismaClient();
 const app = express();
 
-async function bootstrap() {
+async function main() {
   app.get('/api/healthchecker', async (_, res: Response) => {
     const message = await redisClient.get('try');
     res.status(200).json({
@@ -25,10 +25,12 @@ async function bootstrap() {
   });
 }
 
-bootstrap()
-  .catch((err) => {
-    throw err;
-  })
-  .finally(async () => {
+main()
+  .then(async () => {
     await prisma.$disconnect();
+  })
+  .catch(async (err) => {
+    console.error(err);
+    await prisma.$disconnect();
+    process.exit(1);
   });
