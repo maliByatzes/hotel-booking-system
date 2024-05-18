@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { getOnePaymentStatus } from "../services/payment-status.service";
 import { createBooking } from "../services/booking.service";
 import { Booking, Guest, PaymentStatus } from "@prisma/client";
-import { CreateBookingInput } from "../schemas/booking.schema";
+import { CreateBookingInput, DeleteBookingInput, GetBookingInput, UpdateBookingInput } from "../schemas/booking.schema";
 
 
 export const createBookingHandler = async (
@@ -38,3 +38,21 @@ export const createBookingHandler = async (
     next(err);
   }
 };
+
+export const getOneBookingHandler = async (
+  req: Request<{}, {}, GetBookingInput>,
+  res: Response,
+  next: NextFunction
+) => { };
+
+export const updateOneBookingHandler = async (
+  req: Request<{}, {}, UpdateBookingInput>,
+  res: Response,
+  next: NextFunction,
+) => { };
+
+export const deleteOneBookingHandler = async (
+  req: Request<{}, {}, DeleteBookingInput>,
+  res: Response,
+  next: NextFunction,
+) => { };
