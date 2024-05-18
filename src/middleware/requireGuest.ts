@@ -12,6 +12,8 @@ export const requireGuest = (
     if (!guest) {
       return next(new AppError(401, `Session has expired or user doesn't exist`));
     }
+
+    next();
   } catch (err: any) {
     next(err);
   }

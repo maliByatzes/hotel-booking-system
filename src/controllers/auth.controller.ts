@@ -39,7 +39,8 @@ export const registerGuestHandler = async (
   next: NextFunction
 ) => {
   try {
-    const hashedPassword = await bcrypt.hash(req.body.password, 12);
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
     const guest = await createGuest({
       firstName: req.body.firstName,
