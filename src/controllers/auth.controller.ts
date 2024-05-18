@@ -115,7 +115,6 @@ export const refreshAccessTokenHandler = async (
 
     const decoded = verifyJwt<{ sub: string }>(
       refresh_token,
-      'refreshTokenPublicKey'
     );
 
     if (!decoded) {
@@ -134,7 +133,7 @@ export const refreshAccessTokenHandler = async (
       return next(new AppError(403, message));
     }
 
-    const access_token = signJwt({ sub: guest.emailAddress }, 'accessTokenPrivateKey', {
+    const access_token = signJwt({ sub: guest.emailAddress }, {
       expiresIn: `${config.get<number>('accessTokenExpiresIn')}m`,
     });
 

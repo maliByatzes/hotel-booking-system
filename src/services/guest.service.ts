@@ -30,12 +30,12 @@ export const signTokens = async (guest: Prisma.GuestCreateInput) => {
     EX: config.get<number>('redisCacheExpiresIn') * 60,
   });
 
-  const access_token = signJwt({ sub: guest.emailAddress }, 'accessTokenPrivateKey', {
+  const access_token = signJwt({ sub: guest.emailAddress }, {
     expiresIn: `${config.get<number>('accessTokenExpiresIn')}m`,
   })
 
-  const refresh_token = signJwt({ sub: guest.emailAddress }, 'refreshTokenPrivateKey', {
-    expiresIn: `${config.get<number>('refresTokenExpiresIn')}m`,
+  const refresh_token = signJwt({ sub: guest.emailAddress }, {
+    expiresIn: `${config.get<number>('refreshTokenExpiresIn')}m`,
   });
 
   return { access_token, refresh_token };

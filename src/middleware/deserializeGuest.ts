@@ -29,7 +29,6 @@ export const deserializeGuest = async (
     // Validate the access token
     const decoded = verifyJwt<{ sub: string }>(
       access_token,
-      'accessTokenPublicKey'
     );
 
     if (!decoded) {

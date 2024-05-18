@@ -3,31 +3,29 @@ import config from 'config';
 
 export const signJwt = (
   payload: Object,
-  keyName: 'accessTokenPrivateKey' | 'refreshTokenPrivateKey',
   options: SignOptions
 ) => {
-  const privateKey = Buffer.from(
-    config.get<string>(keyName),
+  const secretKey = Buffer.from(
+    config.get<string>('tokenSecretKey'),
     'base64'
   ).toString('ascii');
 
-  return jwt.sign(payload, privateKey, {
+  return jwt.sign(payload, secretKey, {
     ...(options && options),
-    algorithm: 'RS256',
+    // algorithm: 'RS256',
   });
 };
 
 export const verifyJwt = <T>(
   token: string,
-  keyName: 'accessTokenPublicKey' | 'refreshTokenPublicKey'
 ): T | null => {
   try {
-    const publicKey = Buffer.from(
-      config.get<string>(keyName),
+    const secretKey = Buffer.from(
+      config.get<string>('tokenSecretKey'),
       'base64'
     ).toString('ascii');
 
-    const decoded = jwt.verify(token, publicKey) as T;
+    const decoded = jwt.verify(token, secretKey) as T;
 
     return decoded;
   } catch (err) {
