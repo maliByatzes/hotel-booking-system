@@ -10,6 +10,7 @@ import AppError from './utils/appError';
 import cors from 'cors';
 import authRouter from './routes/auth.routes';
 import guestRouter from './routes/guest.routes';
+import bookingRouter from './routes/booking.routes';
 
 validateEnv();
 
@@ -32,8 +33,9 @@ async function main() {
     app.use(morgan('dev'));
   }
 
-  app.use('/api/auth', authRouter);
-  app.use('/api/guests/', guestRouter);
+  app.use('/api/v1/auth', authRouter);
+  app.use('/api/v1/guests/', guestRouter);
+  app.use('/api/v1/booking/', bookingRouter);
 
   app.get('/api/healthchecker', async (_, res: Response) => {
     const message = await redisClient.get('try');
