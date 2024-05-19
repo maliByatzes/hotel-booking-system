@@ -1,10 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import { getOnePaymentStatus } from "../services/payment-status.service";
 import { createBooking, deleteOneBooking, getOneBooking, updateOneBooking } from "../services/booking.service";
-import { Booking, Guest, PaymentStatus } from "@prisma/client";
+import { Addon, Booking, BookingAddon, Guest, PaymentStatus } from "@prisma/client";
 import { CreateBookingInput, DeleteBookingInput, GetBookingInput, UpdateBookingInput } from "../schemas/booking.schema";
 import { findUniqueGuest } from "../services/guest.service";
 import AppError from "../utils/appError";
+import { getOneAddon } from "../services/addon.service";
+import { createBookingAddon } from "../services/booking-addon.service";
 
 
 export const createBookingHandler = async (
@@ -32,6 +34,16 @@ export const createBookingHandler = async (
       guest: {},
       paymentStatus: {},
     }, guest, paymentStatus);
+
+    if (req.body.addonName !== 'None') {
+      const addon: Addon = await getOneAddon(req.body.addonName);
+
+      if (!addon) {
+        return next(new AppError(404, `Addon ${req.body.addonName} is not found`));
+      }
+
+      await createBookingAddon(booking, addon);
+    }
 
     res.status(201).json({
       status: 'success',
@@ -72,6 +84,9 @@ export const updateOneBookingHandler = async (
   res: Response,
   next: NextFunction,
 ) => {
+
+  // TODO: Allow user to add more Addons
+
   try {
     const booking = await getOneBooking(Number(req.params.bookingId));
 

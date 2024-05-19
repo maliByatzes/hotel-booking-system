@@ -1,6 +1,5 @@
 import { PrismaClient, Prisma, Guest, PaymentStatus, Booking } from "@prisma/client";
 
-
 const prisma = new PrismaClient();
 
 export const createBooking = async (

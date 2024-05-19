@@ -16,4 +16,7 @@ docker-start:
 server:
 	pnpm start
 
-.PHONY: docker-up docker-reset docker-stop docker-start server
+backup:
+	docker exec -i hotel-postgres pg_dump -U admin hoteldb > postgres-backup.sql
+
+.PHONY: docker-up docker-reset docker-stop docker-start server backup

@@ -1,5 +1,22 @@
 import { z } from 'zod';
 
+const AddonNameEnum = z.enum([
+  'None',
+  'Breakfast Buffet',
+  'Airport Shuttle Service',
+  'Spa Package',
+  'Romantic Getaway Package',
+  'Late Checkout'
+]);
+
+const RoomClassNameEnum = z.enum([
+  'Standard',
+  'Deluxe',
+  'Suite',
+  'Family',
+  'Penthouse'
+]);
+
 export const createBookingSchema = z.object({
   body: z.object({
     checkinDate: z.string({
@@ -17,6 +34,8 @@ export const createBookingSchema = z.object({
     bookingAmount: z.number({
       required_error: "booking amount is required"
     }),
+    addonName: AddonNameEnum,
+    roomClassName: RoomClassNameEnum,
   }),
 });
 
