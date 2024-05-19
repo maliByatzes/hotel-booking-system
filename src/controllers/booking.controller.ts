@@ -17,9 +17,12 @@ export const createBookingHandler = async (
     const guest: Guest = await findUniqueGuest(res.locals.guest.emailAddress);
 
     const paymentStatus: PaymentStatus = await getOnePaymentStatus('Pending');
-    // Check omitted for validity of paymentStatus here for some reason...
 
-    // Check on the last two atrrs on the first object...
+    if (!paymentStatus) {
+      console.error('Payment Status with status of Pending is not found');
+      process.exit(1);
+    }
+
     const booking: Booking = await createBooking({
       checkinDate: req.body.checkinDate,
       checkoutDate: req.body.checkoutDate,

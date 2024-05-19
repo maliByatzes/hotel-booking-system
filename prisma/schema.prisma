@@ -8,49 +8,136 @@ datasource db {
 }
 
 model Guest {
+
+  id           Int      @id @default(autoincrement())
+  firstName    String   @map("first_name") @db.VarChar(100)
+  lastName     String   @map("last_name") @db.VarChar(100)
+  emailAddress String   @unique @map("email_address") @db.VarChar(255)
+  phoneNumber  String   @unique @map("phone_number") @db.VarChar(20)
+  verified     Boolean? @default(false)
+
+  password String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  bookings Booking[]
+
   @@map(name: "guest")
-
-  id              Int         @id @default(autoincrement())
-  firstName       String      @map("first_name")  @db.VarChar(100)
-  lastName        String      @map("last_name") @db.VarChar(100)
-  emailAddress    String      @map("email_address") @unique @db.VarChar(255)
-  phoneNumber     String      @map("phone_number") @unique @db.VarChar(20)
-  verified        Boolean?    @default(false)
-
-  password        String
-
-  createdAt       DateTime    @map("created_at") @default(now())
-  updatedAt       DateTime    @map("updated_at") @updatedAt
-
-  bookings        Booking[]
 }
 
 model PaymentStatus {
+
+  id                Int       @id @default(autoincrement())
+  paymentStatusName String    @map("payment_status_name") @db.VarChar(50)
+  bookings          Booking[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
   @@map(name: "payment_status")
-
-  id                  Int         @id @default(autoincrement())
-  paymentStatusName   String      @map("payment_status_name") @db.VarChar(50)
-  bookings            Booking[]
-
-  createdAt           DateTime    @map("created_at") @default(now())
-  updatedAt           DateTime    @map("updated_at") @updatedAt
 }
 
 model Booking {
+
+  id              Int      @id @default(autoincrement())
+  guestId         Int      @map("guest_id")
+  paymentStatusId Int      @map("payment_status_id")
+  checkinDate     DateTime @map("checkin_date") @db.Date
+  checkoutDate    DateTime @map("checkout_date") @db.Date
+  numAdults       Int      @map("num_adults")
+  numChildren     Int      @map("num_children")
+  bookingAmount   Int      @map("booking_amount")
+
+  guest         Guest         @relation(fields: [guestId], references: [id])
+  paymentStatus PaymentStatus @relation(fields: [paymentStatusId], references: [id])
+
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+  BookingAddon BookingAddon[]
+
   @@map(name: "booking")
+}
 
-  id                Int           @id @default(autoincrement())
-  guestId           Int           @map("guest_id")
-  paymentStatusId   Int           @map("payment_status_id")
-  checkinDate       DateTime      @map("checkin_date") @db.Date
-  checkoutDate      DateTime      @map("checkout_date") @db.Date
-  numAdults         Int           @map("num_adults")
-  numChildren       Int           @map("num_children")
-  bookingAmount     Int           @map("booking_amount")
+model Addon {
 
-  guest             Guest         @relation(fields: [guestId], references: [id])
-  paymentStatus     PaymentStatus @relation(fields: [paymentStatusId], references: [id])
+  id           Int            @id @default(autoincrement())
+  addonName    String         @map("addon_name") @db.VarChar(100)
+  price        Int
+  bookingAddOn BookingAddon[]
 
-  createdAt         DateTime      @map("created_at") @default(now())
-  updatedAt         DateTime      @map("updated_at") @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map(name: "addon")
+}
+
+model BookingAddon {
+
+  bookingId Int @map("booking_id")
+  booking   Booking @relation(fields: [bookingId], references: [id])
+  addonId   Int @map("addon_id")
+  addon     Addon   @relation(fields: [addonId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([bookingId, addonId])
+  @@map(name: "booking_addon")
+}
+
+model Room {
+
+  id          Int    @id @default(autoincrement())
+  floorId     Int    @map("floor_id")
+  roomClassId Int    @map("room_class_id")
+  statusId    Int    @map("status_id")
+  roomNumber  String @map("room_number") @db.VarChar(10)
+
+  floor     Floor      @relation(fields: [floorId], references: [id])
+  roomClass RoomClass  @relation(fields: [roomClassId], references: [id])
+  status    RoomStatus @relation(fields: [statusId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([floorId, roomClassId, statusId])
+  @@map(name: "room")
+}
+
+model Floor {
+
+  id          Int    @id @default(autoincrement())
+  floorNumber String @map("floor_number") @db.VarChar(5)
+  rooms       Room[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map(name: "floor")
+}
+
+model RoomClass {
+
+  id        Int    @id @default(autoincrement())
+  className String @map("class_name") @db.VarChar(100)
+  basePrice Int    @map("base_price")
+  rooms     Room[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map(name: "room_class")
+}
+
+model RoomStatus {
+
+  id         Int    @id @default(autoincrement())
+  statusName String @map("status_name") @db.VarChar(100)
+  rooms      Room[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map(name: "room_status")
 }
