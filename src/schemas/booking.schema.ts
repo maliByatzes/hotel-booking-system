@@ -4,10 +4,10 @@ export const createBookingSchema = z.object({
   body: z.object({
     checkinDate: z.string({
       required_error: "checkin date is required"
-    }).date(),
+    }),
     checkoutDate: z.string({
       required_error: "chekout date is required"
-    }).date(),
+    }),
     numAdults: z.number({
       required_error: "num of adults is required"
     }),
