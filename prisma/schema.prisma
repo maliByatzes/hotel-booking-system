@@ -55,8 +55,19 @@ model Booking {
   createdAt    DateTime       @default(now()) @map("created_at")
   updatedAt    DateTime       @updatedAt @map("updated_at")
   BookingAddon BookingAddon[]
+  BookingRoom  BookingRoom[]
 
   @@map(name: "booking")
+}
+
+model BookingRoom {
+  bookingId Int @map("booking_id")
+  booking Booking @relation(fields: [bookingId], references: [id])
+  roomId Int @map("room_id")
+  room Room @relation(fields: [roomId], references: [id])
+
+  @@unique([bookingId, roomId])
+  @@map(name: "booking_room")
 }
 
 model Addon {
@@ -97,6 +108,7 @@ model Room {
   floor     Floor      @relation(fields: [floorId], references: [id])
   roomClass RoomClass  @relation(fields: [roomClassId], references: [id])
   status    RoomStatus @relation(fields: [statusId], references: [id])
+  BookingRoom BookingRoom[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
