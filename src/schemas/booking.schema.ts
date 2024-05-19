@@ -22,7 +22,7 @@ export const createBookingSchema = z.object({
 
 const params = {
   params: z.object({
-    bookingId: z.number({
+    bookingId: z.string({
       required_error: 'Booking id is required'
     }),
   }),
