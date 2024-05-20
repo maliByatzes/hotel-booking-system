@@ -469,6 +469,7 @@ COPY public.addon (id, addon_name, price, created_at, updated_at) FROM stdin;
 --
 
 COPY public.booking (id, guest_id, payment_status_id, checkin_date, checkout_date, num_adults, num_children, booking_amount, created_at, updated_at) FROM stdin;
+1	1	1	2024-07-23	2025-10-24	4	0	200	2024-05-20 07:32:35.906	2024-05-20 07:32:35.906
 \.
 
 
@@ -477,6 +478,7 @@ COPY public.booking (id, guest_id, payment_status_id, checkin_date, checkout_dat
 --
 
 COPY public.booking_addon (booking_id, addon_id, created_at, updated_at) FROM stdin;
+1	3	2024-05-20 07:32:36.283	2024-05-20 07:32:36.283
 \.
 
 
@@ -485,6 +487,7 @@ COPY public.booking_addon (booking_id, addon_id, created_at, updated_at) FROM st
 --
 
 COPY public.booking_room (booking_id, room_id) FROM stdin;
+1	1
 \.
 
 
@@ -506,6 +509,7 @@ COPY public.floor (id, floor_number, created_at, updated_at) FROM stdin;
 --
 
 COPY public.guest (id, first_name, last_name, email_address, phone_number, verified, password, created_at, updated_at) FROM stdin;
+1	james	cole	jamescole@gmail.com	0123456790	f	$2a$10$ZoEHJTNQP3xTkpIdjSrrEOayVlxINHQ6w3U6qrrWvTggB3inw9I7u	2024-05-20 07:26:45.438	2024-05-20 07:26:45.438
 \.
 
 
@@ -514,6 +518,9 @@ COPY public.guest (id, first_name, last_name, email_address, phone_number, verif
 --
 
 COPY public.payment_status (id, payment_status_name, created_at, updated_at) FROM stdin;
+1	Pending	2024-05-20 07:31:13.139	2024-05-20 07:31:13.139
+2	Completed	2024-05-20 07:31:13.139	2024-05-20 07:31:13.139
+3	Failed	2024-05-20 07:31:13.139	2024-05-20 07:31:13.139
 \.
 
 
@@ -577,7 +584,7 @@ SELECT pg_catalog.setval('public.addon_id_seq', 5, true);
 -- Name: booking_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
 --
 
-SELECT pg_catalog.setval('public.booking_id_seq', 1, false);
+SELECT pg_catalog.setval('public.booking_id_seq', 1, true);
 
 
 --
@@ -591,14 +598,14 @@ SELECT pg_catalog.setval('public.floor_id_seq', 5, true);
 -- Name: guest_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
 --
 
-SELECT pg_catalog.setval('public.guest_id_seq', 1, false);
+SELECT pg_catalog.setval('public.guest_id_seq', 1, true);
 
 
 --
 -- Name: payment_status_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
 --
 
-SELECT pg_catalog.setval('public.payment_status_id_seq', 1, false);
+SELECT pg_catalog.setval('public.payment_status_id_seq', 3, true);
 
 
 --
