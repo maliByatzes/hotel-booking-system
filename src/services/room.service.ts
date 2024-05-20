@@ -6,6 +6,16 @@ export const getOneRoom = async (
   className: string,
   statusName: string
 ) => {
-  // Hopefuly perform some JOIN magic here with prisma the get the desired room
-  // Also perform a booking.bookingAmount >= room_class.base_price
+  const room = await prisma.room.findFirst({
+    where: {
+      roomClass: {
+        className: className,
+      },
+      status: {
+        statusName: statusName,
+      },
+    }
+  });
+
+  return room;
 };

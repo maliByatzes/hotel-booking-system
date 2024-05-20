@@ -1,12 +1,15 @@
 import { NextFunction, Request, Response } from "express";
 import { getOnePaymentStatus } from "../services/payment-status.service";
 import { createBooking, deleteOneBooking, getOneBooking, updateOneBooking } from "../services/booking.service";
-import { Addon, Booking, BookingAddon, Guest, PaymentStatus } from "@prisma/client";
+import { Addon, Booking, BookingAddon, Guest, PaymentStatus, Room } from "@prisma/client";
 import { CreateBookingInput, DeleteBookingInput, GetBookingInput, UpdateBookingInput } from "../schemas/booking.schema";
 import { findUniqueGuest } from "../services/guest.service";
 import AppError from "../utils/appError";
 import { getOneAddon } from "../services/addon.service";
 import { createBookingAddon } from "../services/booking-addon.service";
+import { getOneRoom } from "../services/room.service";
+import { getOneRoomClass } from "../services/room-class.service";
+import { createBookingRoom } from "../services/booking-room.service";
 
 
 export const createBookingHandler = async (
@@ -16,41 +19,60 @@ export const createBookingHandler = async (
 ) => {
 
   try {
+    // Get the guest from db using locals
     const guest: Guest = await findUniqueGuest(res.locals.guest.emailAddress);
 
+    // Query a specific payment status to verify its availability
     const paymentStatus: PaymentStatus = await getOnePaymentStatus('Pending');
 
+    // Verify the existence and throw a server error when not found
     if (!paymentStatus) {
       console.error('Payment Status with status of Pending is not found');
       process.exit(1);
     }
 
-    const booking: Booking = await createBooking({
-      checkinDate: req.body.checkinDate,
-      checkoutDate: req.body.checkoutDate,
-      numAdults: req.body.numAdults,
-      numChildren: req.body.numChildren,
-      bookingAmount: req.body.bookingAmount,
-      guest: {},
-      paymentStatus: {},
-    }, guest, paymentStatus);
+    // Verify that the client qualifies for that room class
+    const roomClass = await getOneRoomClass(req.body.roomClassName);
 
-    if (req.body.addonName !== 'None') {
-      const addon: Addon = await getOneAddon(req.body.addonName);
-
-      if (!addon) {
-        return next(new AppError(404, `Addon ${req.body.addonName} is not found`));
-      }
-
-      await createBookingAddon(booking, addon);
+    if (roomClass.basePrice > req.body.bookingAmount) {
+      return next(new AppError(400, `The booking amount must be at least equal or greater than ${roomClass.basePrice}`));
     }
 
-    res.status(201).json({
-      status: 'success',
-      data: {
-        booking,
-      },
-    });
+    // Get the desired room by the guest
+    const room = await getOneRoom(req.body.roomClassName, 'Available');
+
+    if (room) {
+      const booking: Booking = await createBooking({
+        checkinDate: req.body.checkinDate,
+        checkoutDate: req.body.checkoutDate,
+        numAdults: req.body.numAdults,
+        numChildren: req.body.numChildren,
+        bookingAmount: req.body.bookingAmount,
+        guest: {},
+        paymentStatus: {},
+      }, guest, paymentStatus);
+
+      if (req.body.addonName !== 'None') {
+        const addon: Addon = await getOneAddon(req.body.addonName);
+
+        if (!addon) {
+          return next(new AppError(404, `Addon ${req.body.addonName} is not found`));
+        }
+
+        await createBookingAddon(booking, addon);
+      }
+
+      await createBookingRoom(booking, room);
+
+      res.status(201).json({
+        status: 'success',
+        data: {
+          booking,
+        },
+      });
+    } else {
+      return next(new AppError(404, `No suitable room found with your needs`));
+    }
   } catch (err: any) {
     next(err);
   }
@@ -104,7 +126,7 @@ export const updateOneBookingHandler = async (
         updatedBooking,
       },
     });
-  } catch(err: any) {
+  } catch (err: any) {
     next(err);
   }
 };
@@ -127,7 +149,7 @@ export const deleteOneBookingHandler = async (
       status: 'success',
       data: null,
     });
-  } catch(err: any) {
+  } catch (err: any) {
     next(err);
   }
 };
