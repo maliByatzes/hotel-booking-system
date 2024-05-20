@@ -69,6 +69,7 @@ export const updateBookingSchema = z.object({
     bookingAmount: z.number({
       required_error: "booking amount is required"
     }),
+    addonName: AddonNameEnum,
   }).partial(),
 });
 

@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Room } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -18,4 +18,18 @@ export const getOneRoom = async (
   });
 
   return room;
+};
+
+export const updateOneRoom = async (
+  roomId: number,
+  statusId: number
+) => {
+  return (await prisma.room.update({
+    where: {
+      id: roomId,
+    },
+    data: {
+      statusId: statusId,
+    }
+  })) as Room;
 };

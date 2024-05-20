@@ -1,15 +1,16 @@
 import { NextFunction, Request, Response } from "express";
 import { getOnePaymentStatus } from "../services/payment-status.service";
 import { createBooking, deleteOneBooking, getOneBooking, updateOneBooking } from "../services/booking.service";
-import { Addon, Booking, BookingAddon, Guest, PaymentStatus, Room } from "@prisma/client";
+import { Addon, Booking, Guest, PaymentStatus } from "@prisma/client";
 import { CreateBookingInput, DeleteBookingInput, GetBookingInput, UpdateBookingInput } from "../schemas/booking.schema";
 import { findUniqueGuest } from "../services/guest.service";
 import AppError from "../utils/appError";
 import { getOneAddon } from "../services/addon.service";
 import { createBookingAddon } from "../services/booking-addon.service";
-import { getOneRoom } from "../services/room.service";
+import { getOneRoom, updateOneRoom } from "../services/room.service";
 import { getOneRoomClass } from "../services/room-class.service";
 import { createBookingRoom } from "../services/booking-room.service";
+import { getPostgresTimestamp } from "../utils/getTimestamp";
 
 
 export const createBookingHandler = async (
@@ -42,6 +43,8 @@ export const createBookingHandler = async (
     const room = await getOneRoom(req.body.roomClassName, 'Available');
 
     if (room) {
+      await updateOneRoom(room.id, 3); // BAD HARDCODED VALUE!!
+
       const booking: Booking = await createBooking({
         checkinDate: req.body.checkinDate,
         checkoutDate: req.body.checkoutDate,
@@ -107,8 +110,6 @@ export const updateOneBookingHandler = async (
   next: NextFunction,
 ) => {
 
-  // TODO: Allow user to add more Addons
-
   try {
     const booking = await getOneBooking(Number(req.params.bookingId));
 
@@ -116,9 +117,30 @@ export const updateOneBookingHandler = async (
       return next(new AppError(404, `Post with ID: ${req.params.bookingId} not found`));
     }
 
-    const newBooking = Object.assign(booking, req.body);
+    const newBooking: Booking = {
+      id: booking.id,
+      guestId: booking.guestId,
+      paymentStatusId: booking.paymentStatusId,
+      checkinDate: new Date(req.body.checkinDate || booking.checkinDate),
+      checkoutDate: new Date(req.body.checkoutDate || booking.checkoutDate),
+      numAdults: req.body.numAdults || booking.numAdults,
+      numChildren: req.body.numChildren || booking.numChildren,
+      bookingAmount: req.body.bookingAmount || booking.bookingAmount,
+      createdAt: booking.createdAt,
+      updatedAt: new Date(getPostgresTimestamp()),
+    };
 
     const updatedBooking = await updateOneBooking(Number(req.params.bookingId), newBooking);
+
+    if (req.body.addonName) {
+      const addon = await getOneAddon(req.body.addonName);
+
+      if (addon) {
+        await createBookingAddon(updatedBooking, addon);
+      } else {
+        return next(new AppError(404, `Addon with name: ${req.body.addonName} is not offered`));
+      }
+    }
 
     res.status(200).json({
       status: 'success',
@@ -143,6 +165,7 @@ export const deleteOneBookingHandler = async (
       return next(new AppError(404, `Post with ID: ${req.params.bookingId} is not found`));
     }
 
+    // Delete entries in the two joining tables
     await deleteOneBooking(Number(req.params.bookingId));
 
     res.status(204).json({
