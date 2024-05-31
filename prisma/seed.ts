@@ -101,91 +101,91 @@ const rooms = [
     floorId: 1,
     roomClassId: 1,
     statusId: 3,
-    roomNumber: 101
+    roomNumber: "101"
   },
   {
     floorId: 1,
     roomClassId: 2,
     statusId: 2,
-    roomNumber: 102
+    roomNumber: "102"
   },
   {
     floorId: 1,
     roomClassId: 3,
     statusId: 3,
-    roomNumber: 103
+    roomNumber: "103"
   },
   {
     floorId: 2,
     roomClassId: 2,
     statusId: 1,
-    roomNumber: 201
+    roomNumber: "201"
   },
   {
     floorId: 2,
     roomClassId: 4,
     statusId: 2,
-    roomNumber: 202
+    roomNumber: "202"
   },
   {
     floorId: 2,
     roomClassId: 5,
     statusId: 3,
-    roomNumber: 203
+    roomNumber: "203"
   },
   {
     floorId: 3,
     roomClassId: 1,
     statusId: 1,
-    roomNumber: 301
+    roomNumber: "301"
   },
   {
     floorId: 3,
     roomClassId: 3,
     statusId: 2,
-    roomNumber: 302
+    roomNumber: "302"
   },
   {
     floorId: 3,
     roomClassId: 4,
     statusId: 3,
-    roomNumber: 303
+    roomNumber: "303"
   },
   {
     floorId: 4,
     roomClassId: 5,
     statusId: 1,
-    roomNumber: 401
+    roomNumber: "401"
   },
   {
     floorId: 4,
     roomClassId: 2,
     statusId: 2,
-    roomNumber: 402
+    roomNumber: "402"
   },
   {
     floorId: 4,
     roomClassId: 1,
     statusId: 3,
-    roomNumber: 403
+    roomNumber: "403"
   },
   {
     floorId: 5,
     roomClassId: 3,
     statusId: 1,
-    roomNumber: 501
+    roomNumber: "501"
   },
   {
     floorId: 5,
     roomClassId: 4,
     statusId: 2,
-    roomNumber: 502
+    roomNumber: "502"
   },
   {
     floorId: 5,
     roomClassId: 5,
     statusId: 3,
-    roomNumber: 503
+    roomNumber: "503"
   },
 ];
 
