@@ -54,6 +54,16 @@ appropriate rooms. Guests can register, login, logout, create a booking and so m
     TOKEN_SECRET_KEY=767e0ea4725fade20882c396f503f5ec1fb12fea94f6af92e300504aaf3c053fbda4cc6942a02b25db1a667bd7992c9637fd7e29aa304569d73cf13f57f9cbe1
     ```
 
+2.  Create a postgres.env file in the project's root directory and add the postgres
+    environment variables:
+    ```env
+    POSTGRES_HOST=127.0.0.1
+    POSTGRES_PORT=5432
+    POSTGRES_USER=admin
+    POSTGRES_PASSWORD=secret
+    POSTGRES_DB=hoteldb
+    ```
+
 2.  Create postgres and redis containers by running:
     ```sh
     make docker-up
