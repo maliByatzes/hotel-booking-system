@@ -80,7 +80,7 @@ appropriate rooms. Guests can register, login, logout, create a booking and so m
 
 4.  Run seed script to populate the database with data:
     ```sh
-    npx prisma db seed
+    pnpm run seed
     ```
 
 ## Usage
