@@ -1,12 +1,12 @@
 # Hotel Booking System
 
-A backend application for hotel booking system where guests can log bookings and will be assigned to
+A backend application for hotel booking system where guests can create bookings and will be assigned to
 appropriate rooms. Guests can register, login, logout, create a booking and so much more.
 
 ## Features
 
 - Guests can perform basic authentication which include registration, login, logout, refresh access token.
-- Guests when only logged can create a new booking, get a booking or update a booking.
+- Guests, when only logged in, can create a new booking, get a booking or update a booking.
 - Guests can get their account information only when logged in.
 
 ## Tech Stack
@@ -59,9 +59,14 @@ appropriate rooms. Guests can register, login, logout, create a booking and so m
     make docker-up
     ```
 
-3.  Run migrations to populate the database with data:
+3.  Run migrations:
     ```sh
-    # UNDER DEVELOPMENT
+    npx prisma migrate dev
+    ```
+
+4.  Run seed script to populate the database with data:
+    ```sh
+    npx prisma db seed
     ```
 
 ## Usage
@@ -69,6 +74,13 @@ appropriate rooms. Guests can register, login, logout, create a booking and so m
 1.  Run the application
     ```sh
     make server
+    ```
+
+2.  To view PostgreSQL database you can use any client, but I made us of [pgcli](https://pgcli.com).
+    Follow the installation instructions on their website. You can use the tool like this:
+    ```sh
+    pgcli -h localhost -p 5432 -U admin -d hoteldb
+    # When prompted for password use "secret"
     ```
 
 The server should be running on `http://localhost:8000`.
