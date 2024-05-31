@@ -101,23 +101,99 @@ The server should be running on `http://localhost:8000`.
 
 ## API Endpoints
 
+### Healthcheck
+- **GET**: `/api/healthcheck` - Check if the server is up and running.
+  ```sh
+  curl --location 'http://localhost:8000/api/healthchecker'
+  ```
+
 ### Authentication
+
+**NOTE**: If you are *chad* and using cURL tool directly instead of a wrapper
+like postman, tokens are sent over cookies so you need to set the Bearer token
+to be authenticated. Also note the data in the request body can be changed.
+
 - **POST**: `/api/v1/auth/register` - Register a new guest.
+  ```sh
+  curl --location 'http://localhost:8000/api/v1/auth/register' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+      "firstName": "test",
+      "lastName": "user",
+      "emailAddress": "testuser@email.com",
+      "phoneNumber": "0123456790",
+      "password": "password123",
+      "passwordConfirm": "password123"
+  }'
+  ```
+
 - **POST**: `/api/v1/auth/login` - Login a guest.
+  ```sh
+  curl --location 'http://localhost:8000/api/v1/auth/login' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+      "emailAddress": "testuser@email.com",
+      "password": "password123"
+  }'
+  ```
+
 - **GET**: `/api/v1/refresh` - Refresh access token.
+  ```sh
+  curl --location 'http://localhost:8000/api/v1/auth/refresh' \
+  --header 'Authorization: Bearer <access_token>'
+  ```
+
 - **GET**: `/api/v1/logout` - Logout a guest
+  ```sh
+  curl --location 'http://localhost:8000/api/v1/auth/logout' \
+  --header 'Authorization: Bearer <access_token>'
+  ```
 
 ### Guest
 - **GET**: `/api/v1/guest/me` - Get logged in guest's information.
+  ```sh
+  curl --location 'http://localhost:8000/api/v1/guests/me' \
+  --header 'Authorization: Bearer <access_token>'
+  ```
 
 ### Booking
 - **POST**: `/api/v1/booking/new` - Create a new booking.
-- **GET**: `/api/v1/booking/:bookingId` - Get one booking by id.
-- **PATCH**: `/api/v1/booking/:bookingId` - Update one booking.
+  ```sh
+  curl --location 'http://localhost:8000/api/v1/booking/new' \
+  --header 'Content-Type: application/json' \
+  --header 'Authorization: Bearer <access_token>' \
+  --data '{
+      "checkinDate": "2012-02-12T22:00:00.000Z",
+      "checkoutDate": "2012-10-24T22:00:00.000Z",
+      "numAdults": 1,
+      "numChildren": 2,
+      "bookingAmount": 400,
+      "addonName": "Spa Package",
+      "roomClassName": "Standard"
+  }'
+  ```
 
-### Example requests to added here
+- **GET**: `/api/v1/booking/:bookingId` - Get one booking by id.
+  ```sh
+  curl --location 'http://localhost:8000/api/v1/booking/1' \
+  --header 'Authorization: Bearer <access_token>'
+  ```
+
+- **PATCH**: `/api/v1/booking/:bookingId` - Update one booking.
+  ```sh
+  curl --location --request PATCH 'http://localhost:8000/api/v1/booking/2' \
+  --header 'Content-Type: application/json' \
+  --header 'Authorization: Bearer <access_token>' \
+  --data '{
+     "numChildren": 3
+  }'
+  ```
 
 ## Testing
+
+UNDER DEVELOPMENT
+
+## Deployment
 
 UNDER DEVELOPMENT
 
