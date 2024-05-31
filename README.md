@@ -53,6 +53,10 @@ appropriate rooms. Guests can register, login, logout, create a booking and so m
     POSTGRES_DB=hoteldb
     TOKEN_SECRET_KEY=767e0ea4725fade20882c396f503f5ec1fb12fea94f6af92e300504aaf3c053fbda4cc6942a02b25db1a667bd7992c9637fd7e29aa304569d73cf13f57f9cbe1
     ```
+    You can also generate a new secret key by running:
+    ```sh
+    node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+    ```
 
 2.  Create a postgres.env file in the project's root directory and add the postgres
     environment variables:
