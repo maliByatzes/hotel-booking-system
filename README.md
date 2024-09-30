@@ -1,15 +1,15 @@
-# Hotel Booking System
+# 🦁 Hotel Booking System
 
 A backend application for hotel booking system where guests can create bookings and will be assigned to
 appropriate rooms. Guests can register, login, logout, create a booking and so much more.
 
-## Features
+## 🦎 Features
 
 - Guests can perform basic authentication which include registration, login, logout, refresh access token.
 - Guests, when only logged in, can create a new booking, get a booking or update a booking.
 - Guests can get their account information only when logged in.
 
-## Tech Stack
+## 🐧 Tech Stack
 
 - **Node.js**: JavaScript runtime environment.
 - **Typescript**: JavaScript with syntax for types.
@@ -19,13 +19,13 @@ appropriate rooms. Guests can register, login, logout, create a booking and so m
 - **Docker**: Open-source software for deploying and running of containerized applications.
 - **Redis**: NoSQL database management software.
 
-## Prerequisites
+## 🫎 Prerequisites
 
 - [Node.js](https://nodejs.org) (at least version 20.14.0)
 - [pnpm](https://pnpm.io) (version 9.x)
 - [Docker](https://docker.com)
 
-## Installation
+## 🐳 Installation
 
 1.  Clone the repository
     ```sh
@@ -38,7 +38,7 @@ appropriate rooms. Guests can register, login, logout, create a booking and so m
     pnpm install
     ```
 
-## Configuration
+## 🤖 Configuration
 
 1.  Create a .env file int project's root directory and add all the requred environment
     variables, also you can change the values to your liking:
@@ -83,7 +83,7 @@ appropriate rooms. Guests can register, login, logout, create a booking and so m
     pnpm run seed
     ```
 
-## Usage
+## 🐬 Usage
 
 1.  Run the application
     ```sh
@@ -99,15 +99,15 @@ appropriate rooms. Guests can register, login, logout, create a booking and so m
 
 The server should be running on `http://localhost:8000`.
 
-## API Endpoints
+## 🦩 API Endpoints
 
-### Healthcheck
+### 🐛 Healthcheck
 - **GET**: `/api/healthcheck` - Check if the server is up and running.
   ```sh
   curl --location 'http://localhost:8000/api/healthchecker'
   ```
 
-### Authentication
+### 🦬 Authentication
 
 **NOTE**: If you are *chad* and using cURL tool directly instead of a wrapper
 like postman, tokens are sent over cookies so you need to set the Bearer token
@@ -149,14 +149,14 @@ to be authenticated. Also note the data in the request body can be changed.
   --header 'Authorization: Bearer <access_token>'
   ```
 
-### Guest
+### 🦫 Guest
 - **GET**: `/api/v1/guest/me` - Get logged in guest's information.
   ```sh
   curl --location 'http://localhost:8000/api/v1/guests/me' \
   --header 'Authorization: Bearer <access_token>'
   ```
 
-### Booking
+### 🐼 Booking
 - **POST**: `/api/v1/booking/new` - Create a new booking.
   ```sh
   curl --location 'http://localhost:8000/api/v1/booking/new' \
@@ -189,19 +189,11 @@ to be authenticated. Also note the data in the request body can be changed.
   }'
   ```
 
-## Testing
-
-UNDER DEVELOPMENT
-
-## Deployment
-
-UNDER DEVELOPMENT
-
-## License
+## 🐊 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Contact
+## 🦔 Contact
 
 maliByatzes - malib2027@gmail.com
 
